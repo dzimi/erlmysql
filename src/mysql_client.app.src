@@ -21,7 +21,7 @@
       ]
     },
     {registered, [datasource_sup]},
-    {applications, [kernel, stdlib]},
+    {applications, [kernel, stdlib, rsrc_pool]},
     {mod, {my, []}},
     {env, []}
 	]
