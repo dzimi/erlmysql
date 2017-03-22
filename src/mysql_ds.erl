@@ -15,6 +15,7 @@
 %% API
 -export([
     connect/0,
+    disconnect/0,
     get_connection/0,
     execute_query/1,
     execute_query/2,
@@ -49,6 +50,16 @@ connect() ->
             {ok, _Pid2} = connect_ds(?SECONDARY_DATA_SOURCE, SecDs),
             ok
     end.
+
+disconnect() ->
+    ok = datasource:close(?PRIMARY_DATA_SOURCE),
+    case get_env(?SECONDARY_DATA_SOURCE, []) of
+        [] -> ok;
+        _ ->
+            ok = datasource:close(?SECONDARY_DATA_SOURCE)
+    end,
+    ok.
+
 
 get_connection() ->
     case get_connection(?PRIMARY_DATA_SOURCE) of
