@@ -22,7 +22,8 @@
     execute_query_with_conn/2,
     execute_query_with_conn/3,
     execute_query_with_conn/4,
-    execute_transaction/1
+    execute_transaction/1,
+    mysql_decimal_to_number/1
 ]).
 
 -define(PRIMARY_DATA_SOURCE, primary_datasource).
@@ -194,3 +195,10 @@ get_env(Key, Default) ->
         undefined -> Default;
         {ok, Value} -> Value
     end.
+
+mysql_decimal_to_number({mysql_decimal, Int, []}) ->
+    list_to_integer(Int);
+mysql_decimal_to_number({mysql_decimal, Int, Fraction}) ->
+    list_to_float(Int ++ "." ++ Fraction);
+mysql_decimal_to_number(_) ->
+    0.
