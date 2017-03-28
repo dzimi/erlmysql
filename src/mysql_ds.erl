@@ -43,8 +43,6 @@ connect() ->
     %secondary data source
     case get_env(?SECONDARY_DATA_SOURCE, []) of
         [] ->
-            error_logger:warning_msg("secondary db datasource not defined. "
-                                     "starting without database connection failover"),
             ok;
         SecDs ->
             {ok, _Pid2} = connect_ds(?SECONDARY_DATA_SOURCE, SecDs),
@@ -128,7 +126,6 @@ connect_ds(DsName, Conf) ->
         % on hour max idle time
         {max_idle_time, 3600000}
     ],
-    error_logger:info_msg("Connect datasource ~p using configuration ~p", [DsName, DSDef]),
     my:new_datasource(DsName, DSDef, PoolDef).
 
 
