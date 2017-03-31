@@ -15,6 +15,7 @@
 %% API
 -export([
     connect/0,
+    connect/2,
     disconnect/0,
     get_connection/0,
     execute_query/1,
@@ -36,20 +37,15 @@
 %%%===================================================================
 %%% API functions
 %%%===================================================================
-
 connect() ->
-    %primary data source
-    PrimDs = get_env(?PRIMARY_DATA_SOURCE, []),
-    {ok, _Pid} = connect_ds(?PRIMARY_DATA_SOURCE, PrimDs),
-    %secondary data source
-    case get_env(?SECONDARY_DATA_SOURCE, []) of
-        [] ->
-            ok;
-        SecDs ->
-            {ok, _Pid2} = connect_ds(?SECONDARY_DATA_SOURCE, SecDs),
-            ok
-    end.
+    connect(get_env(?PRIMARY_DATA_SOURCE, []), get_env(?SECONDARY_DATA_SOURCE, [])).
 
+connect(PrimaryDs, []) ->
+    {ok, _Pid} = connect_ds(?PRIMARY_DATA_SOURCE, PrimaryDs);
+connect(PrimaryDs, SecondaryDs) ->
+    connect(PrimaryDs, []),
+    {ok, _Pid2} = connect_ds(?SECONDARY_DATA_SOURCE, SecondaryDs).
+    
 disconnect() ->
     ok = datasource:close(?PRIMARY_DATA_SOURCE),
     case get_env(?SECONDARY_DATA_SOURCE, []) of
