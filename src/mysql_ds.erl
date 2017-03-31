@@ -41,10 +41,12 @@ connect() ->
     connect(get_env(?PRIMARY_DATA_SOURCE, []), get_env(?SECONDARY_DATA_SOURCE, [])).
 
 connect(PrimaryDs, []) ->
-    {ok, _Pid} = connect_ds(?PRIMARY_DATA_SOURCE, PrimaryDs);
+    {ok, _Pid} = connect_ds(?PRIMARY_DATA_SOURCE, PrimaryDs),
+    ok;
 connect(PrimaryDs, SecondaryDs) ->
     connect(PrimaryDs, []),
-    {ok, _Pid2} = connect_ds(?SECONDARY_DATA_SOURCE, SecondaryDs).
+    {ok, _Pid2} = connect_ds(?SECONDARY_DATA_SOURCE, SecondaryDs),
+    ok.
     
 disconnect() ->
     ok = datasource:close(?PRIMARY_DATA_SOURCE),
