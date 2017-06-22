@@ -116,7 +116,8 @@ connect_ds(DsName, Conf) ->
         port = proplists:get_value(port, Conf),
         database = proplists:get_value(database, Conf),
         user = proplists:get_value(user, Conf),
-        password = proplists:get_value(password, Conf)
+        password = proplists:get_value(password, Conf),
+        flags = proplists:get_value(flags, Conf)
     },
     PoolDef = [
         {min_idle, proplists:get_value(pool_min_idle, Conf)},
