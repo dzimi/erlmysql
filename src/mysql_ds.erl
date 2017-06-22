@@ -110,6 +110,7 @@ transaction({Ds, Conn}, Transaction) ->
     connection:transaction(Conn, TransactionF2).
 
 connect_ds(DsName, Conf) ->
+    ClientOpts = get_client_opts(proplists:get_value(client_options, Conf)),
     DSDef = #datasource{
         name = DsName,
         host = proplists:get_value(host, Conf),
@@ -117,7 +118,7 @@ connect_ds(DsName, Conf) ->
         database = proplists:get_value(database, Conf),
         user = proplists:get_value(user, Conf),
         password = proplists:get_value(password, Conf),
-        flags = proplists:get_value(flags, Conf)
+        flags = ClientOpts
     },
     PoolDef = [
         {min_idle, proplists:get_value(pool_min_idle, Conf)},
@@ -201,3 +202,6 @@ mysql_decimal_to_number({mysql_decimal, Int, Fraction}) ->
     list_to_float(Int ++ "." ++ Fraction);
 mysql_decimal_to_number(_) ->
     0.
+
+get_client_opts(Conf) ->
+    #client_options{local_files = proplists:get_value(local_files, Conf)}.
